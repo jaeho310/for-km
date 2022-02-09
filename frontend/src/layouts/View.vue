@@ -1,5 +1,5 @@
 <template>
-<v-app>
+<div>
   <router-view />
   <v-dialog
       max-width="400"
@@ -12,13 +12,15 @@
         @submit="dialogManager.dialogInfo.submitDialog"
       />
   </v-dialog>
-</v-app>
+</div>
 </template>
 <script>
 import { sync } from 'vuex-pathify'
+import CustomDialog from "@/components/CustomDialog";
 export default {
 name: "DefaultView",
-computed: {
+  components: {CustomDialog},
+  computed: {
     ...sync('dialog',[
       'dialogManager'
     ])

@@ -5,7 +5,7 @@ module.exports = {
   ],
   devServer: {
     overlay: false,
-    port: 8086
+    port: 8396
   },
   lintOnSave: false,
   configureWebpack: {

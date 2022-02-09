@@ -1,56 +1,33 @@
 <template>
-  <v-app>
-    <v-card
-      color="orange"
-      flat
-    >
-      <v-app-bar
-        color="blue lighten-1"
-        dark
-        dense
-      >
-        <v-app-bar-nav-icon @click="drawer = !drawer" />
-        <v-toolbar-title>Platform Backoffice</v-toolbar-title>
-        <v-spacer />
-      </v-app-bar>
-    </v-card>
-    <v-navigation-drawer
-      v-model="drawer"
-      absolute
-      temporary
-      color="blue lighten-5"
-    >
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-img src="https://t1.daumcdn.net/cfile/tistory/2459514E550A64DD27"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-content>
-          <v-list-item-title>Platform Backoffice</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-divider />
-
-      <v-list dense>
-        <v-list-item
-          v-for="item in items"
-          :key="item.title"
-          link
-          :to="item.to"
-        >
+  <v-app-bar dense color="yellow">
+    <v-menu>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn icon v-bind="attrs" v-on="on" @click="isLogin">
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item v-for="(item, idx) in items" :key="idx" @click="clickItem(item)">
           <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
           </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
+          <v-list-item-title class="mr-15"> {{ item.title }}</v-list-item-title>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
-    <router-view />
-  </v-app>
+    </v-menu>
+      <v-col cols="11">
+        <v-app-bar-title class="font-weight-bold">sample-project</v-app-bar-title>
+      </v-col>
+      <v-spacer/>
+      <v-col>
+        <v-btn v-if="!this.auth" color="yellow lighten-4" @click="toLogin">
+          로그인
+        </v-btn>
+        <v-btn v-if="this.auth" color="yellow lighten-4" @click="toLogout">
+          로그아웃
+        </v-btn>
+      </v-col>
+  </v-app-bar>
 </template>
 
 <script>
@@ -59,12 +36,56 @@ export default {
   name: "DefaultHeader",
   data() {
     return {
-      drawer: true,
     }
   },
+  methods: {
+    clickItem(item) {
+      console.log(item.to)
+      this.$router.push(item.to)
+    },
+    getCookie(key) {
+      let result = null
+      let cookie = document.cookie.split(';');
+      cookie.some(function (item) {
+        item = item.replace(' ', '');
+        let cookieItem = item.split('=');
+        if (key === cookieItem[0]) {
+          result = cookieItem[1];
+          return true;
+        }
+      });
+      return result != null;
+    },
+    /**
+     * 메뉴를 클릭할때 JSESSIONID를 확인하여
+     * 서버에서 발급한 세션키를 쿠키로 가지고있는지 확인한다.
+     */
+    isLogin() {
+      // JSESSIONID 라는 쿠키 확인
+      if (this.getCookie('JSESSIONID')) {
+        // 로그인하면 쿠키가 발급되므로 로그아웃메뉴만 보여준다.
+        this.auth = true
+      } else {
+        this.auth = false
+      }
+    },
+    toLogin() {
+      this.$router.push("/login")
+    },
+    toLogout() {
+      this.auth = false
+    }
+  },
+  /**
+   * vuex-pathify 를 사용하여 권한 및 메뉴 관리
+   */
   computed: {
     items: sync('app/items'),
+    auth: sync('app/auth'),
   },
+  mounted() {
+    this.isLogin()
+  }
 }
 </script>
 

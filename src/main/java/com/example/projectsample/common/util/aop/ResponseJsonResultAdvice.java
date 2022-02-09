@@ -16,10 +16,20 @@ import java.net.BindException;
 @Component
 public class ResponseJsonResultAdvice {
 
-    @Around("execution(* com.example.projectsample.interfaces.controller.api..*(..))")
-    public JsonResult responseJsonSuccess(ProceedingJoinPoint point ) throws Throwable {
-        Object results = point.proceed();
-        return new JsonResult( true, new JsonResultSuccess( results ) );
+//    @Around("execution(* com.example.projectsample.interfaces.controller.api..*(..))")
+//    public JsonResult responseJsonSuccess(ProceedingJoinPoint point ) throws Throwable {
+//        Object results = point.proceed();
+//        return new JsonResult( true, new JsonResultSuccess( results ) );
+//    }
+
+    @Around("@annotation(com.example.projectsample.common.util.aop.ResponseJsonResult)")
+    private Object responseJsonResult(ProceedingJoinPoint point) throws Throwable {// NOPMD
+        Object value = point.proceed();
+
+//        if (value instanceof JsonResult) {
+//            return value;
+//        }
+        return new JsonResult( true, new JsonResultSuccess( value ) );
     }
 
     @Around("execution(* com.example.projectsample.common.util.exception.RestControllerExceptionAdvice.*(..))")

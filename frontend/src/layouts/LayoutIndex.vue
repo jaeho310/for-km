@@ -1,8 +1,8 @@
 <template>
-  <v-app>
+  <div>
     <core-header />
     <core-view />
-  </v-app>
+  </div>
 </template>
 <script>
 

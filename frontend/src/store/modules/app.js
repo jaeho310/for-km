@@ -4,21 +4,22 @@ import { make } from 'vuex-pathify'
 const state = {
   items: [
     {
-      title: "home",
+      title: "홈",
       to: '/',
       icon: ''
     },
     {
-      title: 'order list',
-      to : '/order-list',
+      title: '주문하기(상품목록)',
+      to : '/product',
       icon: ''
     },
     {
-      title: 'login',
-      to : '/login',
+      title: '주문목록',
+      to : '/order-list',
       icon: ''
     },
-  ]
+  ],
+  auth: false
 }
 
 const mutations = make.mutations(state)

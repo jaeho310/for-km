@@ -1,6 +1,7 @@
 package com.example.projectsample.interfaces.controller.api;
 
 import com.example.projectsample.application.service.MemberService;
+import com.example.projectsample.common.util.aop.ResponseJsonResult;
 import com.example.projectsample.interfaces.dto.MemberDto;
 import com.example.projectsample.interfaces.dto.MemberLoginDto;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class MemberApiController {
      * @param memberId 유저 아이디
      * @return true는 중복, false는 중복되지 않은 ID
      */
+    @ResponseJsonResult
     @GetMapping("/{memberId}/exist")
     public Object isDuplicated(@PathVariable String memberId) {
         return memberService.isDuplicated(memberId);

@@ -97,6 +97,7 @@ export default {
   name: "Product",
   data() {
     return {
+      isNotify: false,
       search: '',
       selectedProductInfo: {
         id: '',
@@ -152,7 +153,10 @@ export default {
       this.tableHeight = String(window.innerHeight - 300)
     },
     handleClick(row) {
-      dialog.makeDialog({text: '수량을 입력하고 주문버튼을 눌러주세요'})
+      if (!this.isNotify) {
+        dialog.makeDialog({text: '수량을 입력하고 주문버튼을 눌러주세요'})
+        this.isNotify = true
+      }
       this.selectedProductInfo.name = row.name
       this.selectedProductInfo.count = 1
       this.selectedProductInfo.price = row.price

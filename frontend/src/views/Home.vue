@@ -1,6 +1,5 @@
 <template>
-  <v-container tag="section">
-    Home
+  <v-container>
   </v-container>
 </template>
 

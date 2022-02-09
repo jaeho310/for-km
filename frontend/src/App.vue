@@ -17,7 +17,6 @@ export default {
 <style lang="css">
   tbody tr:nth-of-type(odd) {
     background-color: #ffffff;
-
   }
   tbody tr:nth-of-type(even) {
     background-color: #f9f9f9;

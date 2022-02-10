@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.net.HttpCookie;
 
 @RestController
 @RequestMapping("/api/members")
@@ -22,6 +23,7 @@ public class MemberApiController {
      * @return 사용자정보
      */
     @PostMapping("/join")
+    @ResponseJsonResult
     public Object join(@RequestBody MemberDto member) {
         return memberService.insertMember(member);
     }
@@ -33,6 +35,7 @@ public class MemberApiController {
      * @return memberDto
      */
     @PostMapping("/login")
+    @ResponseJsonResult
     public Object userLogin(HttpSession httpSession, @RequestBody MemberLoginDto memberLoginDto) {
         return memberService.memberLogin(memberLoginDto.getMemberId(), memberLoginDto.getPassword(), httpSession);
     }
@@ -42,8 +45,8 @@ public class MemberApiController {
      * @param memberId 유저 아이디
      * @return true는 중복, false는 중복되지 않은 ID
      */
-    @ResponseJsonResult
     @GetMapping("/{memberId}/exist")
+    @ResponseJsonResult
     public Object isDuplicated(@PathVariable String memberId) {
         return memberService.isDuplicated(memberId);
     }

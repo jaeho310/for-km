@@ -15,28 +15,28 @@
         </v-list-item>
       </v-list>
     </v-menu>
-      <v-col cols="11">
-        <v-app-bar-title class="font-weight-bold">sample-project</v-app-bar-title>
-      </v-col>
-      <v-spacer/>
-      <v-col>
-        <v-btn v-if="!this.auth" color="yellow lighten-4" @click="toLogin">
+    <v-col cols="11">
+      <v-app-bar-title class="font-weight-bold">sample-project</v-app-bar-title>
+    </v-col>
+    <v-spacer/>
+    <v-col>
+        <v-btn v-if="!this.auth" color="yellow lighten-4" @click="toLogin" style="display: inline;">
           로그인
         </v-btn>
         <v-btn v-if="this.auth" color="yellow lighten-4" @click="toLogout">
           로그아웃
         </v-btn>
-      </v-col>
+    </v-col>
   </v-app-bar>
 </template>
 
 <script>
-import { sync } from 'vuex-pathify'
+import {sync} from 'vuex-pathify'
+
 export default {
   name: "DefaultHeader",
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     clickItem(item) {
@@ -46,6 +46,7 @@ export default {
     getCookie(key) {
       let result = null
       let cookie = document.cookie.split(';');
+      console.log(cookie)
       cookie.some(function (item) {
         item = item.replace(' ', '');
         let cookieItem = item.split('=');
@@ -68,6 +69,7 @@ export default {
       } else {
         this.auth = false
       }
+      this.toLogin()
     },
     toLogin() {
       this.$router.push("/login")
@@ -84,11 +86,16 @@ export default {
     auth: sync('app/auth'),
   },
   mounted() {
-    this.isLogin()
+    // this.isLogin()
   }
 }
 </script>
 
 <style>
-  ul.menu li{float:left; padding:0px 20px; list-style:none; display: inline;}
+ul.menu li {
+  float: left;
+  padding: 0px 20px;
+  list-style: none;
+  display: inline;
+}
 </style>

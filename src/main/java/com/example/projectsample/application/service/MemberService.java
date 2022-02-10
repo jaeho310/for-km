@@ -1,12 +1,18 @@
 package com.example.projectsample.application.service;
 
+import com.example.projectsample.application.model.entity.Member;
+import com.example.projectsample.application.repository.MemberRepository;
+import com.example.projectsample.common.util.exception.BusinessException;
 import com.example.projectsample.interfaces.dto.MemberDto;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.net.HttpCookie;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -14,25 +20,26 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final MemberRepository memberRepository;
+
+    private final ModelMapper modelMapper;
     /**
      * 회원가입 메서드
-     * @param member 사용자정보를 담는 dto
+     * @param memberDto 사용자정보를 담는 dto
      * @return
      */
-    public Object insertMember(MemberDto member) {
-//        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-//        int insertCnt = userDao.insertMember(userDto);
-//        if (insertCnt != 1) {
-//            throw new RuntimeException("필수정보를 모두 입력해주세요.");
-//        }
-        System.out.println(passwordEncoder.encode("abc"));
-        return "success";
+    public Member insertMember(MemberDto memberDto) {
+        if (isDuplicated(memberDto.getMemberId())) {
+            throw new BusinessException("중복체크가 되지 않은 요청입니다.");
+        }
+        memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+        Member member = modelMapper.map(memberDto, Member.class);
+        return memberRepository.save(member);
     }
 
     public boolean isDuplicated(String memberId) {
-//        return userDao.checkIdDuplicate(memberId) == 1;
-
-        return false;
+        Optional<Member> member = memberRepository.findByMemberId(memberId);
+        return member.isPresent();
     }
 
     /**
@@ -42,15 +49,14 @@ public class MemberService {
      * @param password 사용자가 입력한 비밀번호
      */
     public Object memberLogin(String memberId, String password, HttpSession httpSession) {
-//        String encodedPassword = userDao.getEncodedPassword(userId);
-//        boolean matches = passwordEncoder.matches(password, encodedPassword);
-//        if (!matches) {
-//            throw new RuntimeException("등록되지 않은 유저입니다.");
-//        }
-//        UserDto userDto = userDao.userLogin(userId);
-//        httpSession.setAttribute("UserInfo", userDto);
-//        httpSession.setMaxInactiveInterval(20*60);
-//        return userDto;
-        return "";
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new BusinessException("등록되지 않은 사용자입니다"));
+        if (passwordEncoder.matches(password, member.getPassword())) {
+            httpSession.setAttribute("MemberInfo", member);
+            httpSession.setMaxInactiveInterval(20*60);
+            return member;
+        } else {
+            throw new BusinessException("비밀번호가 일치하지 않습니다.");
+        }
     }
 }

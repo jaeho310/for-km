@@ -14,6 +14,7 @@
           dense>
       </v-text-field>
       <v-text-field
+          type="password"
           label="password"
           v-model="password"
           outlined
@@ -48,7 +49,6 @@
 <script>
 import dialog from "@/utils/dialog";
 import api from "@/utils/api";
-
 export default {
   name: "Join",
   data() {
@@ -70,17 +70,20 @@ export default {
         return
       }
       api({
-        url: "/api/members/login",
-        method: "post",
+        url: `/api/members/${this.id}/exist`,
+        method: "get",
       })
           .then(this.duplicatedResponseHandler)
           .catch(this.promiseRejectHandler)
+    },
+    toLogin() {
+      this.$router.push("/login")
     },
     duplicatedResponseHandler(res) {
       return new Promise((resolve, reject) => {
         try {
           if (res.data.success) {
-            if (res.data.contents) {
+            if (res.data.result.contents) {
               dialog.makeDialog({text: `중복된 아이디입니다.`})
             } else {
               dialog.makeDialog({text: `회원가입이 가능한 아이디입니다.`})
@@ -100,10 +103,32 @@ export default {
         dialog.makeDialog({text: '필수정보를 모두 입력해주세요'})
         return
       }
-      this.joinRequest(this.id, this.password, memberName)
+      if (this.isDuplicated) {
+        dialog.makeDialog({text: 'id 중복체크를 해주세요'})
+        return
+      }
+      this.joinRequest()
     },
     joinRequest() {
-
+      api({
+        url: "/api/members/join",
+        method: "post",
+        data: {
+          'memberId': this.id,
+          'memberName': this.memberName,
+          'password': this.password
+        }
+      })
+          .then(res => {
+            console.log(res)
+            if (res.data.success) {
+              dialog.makeDialog({text: `가입되었습니다.`, callback: this.toLogin})
+            } else {
+              console.log(res.data.result.message)
+              dialog.makeDialog({text: `시스템에러로 회원가입에 실패했습니다.`})
+            }
+          })
+          .catch(this.promiseRejectHandler)
     }
   }
 }

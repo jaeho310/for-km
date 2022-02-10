@@ -1,21 +1,24 @@
 package com.example.projectsample.interfaces.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
+@Setter
 public class MemberDto {
 
+    private Long id;
+
+    @NonNull
     private String memberId;
 
+    @NonNull
     private String password;
 
+    @NonNull
     private String name;
 
-    private Role role;
+//    private Role role;
 }

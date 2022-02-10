@@ -55,13 +55,14 @@ class WebConfig implements WebMvcConfigurer {
         List<String> excludeList = new ArrayList<>();
         excludeList.add("/");
         excludeList.add("/api/members/**");
-//        excludeList.add("/login");
-//        excludeList.add("/css/**");
-//        excludeList.add("/js/**");
-//        excludeList.add("/index.html");
+        excludeList.add("/login");
+        excludeList.add("/css/**");
+        excludeList.add("/js/**");
+        excludeList.add("/index.html");
+        excludeList.add("/h2/**");
 
         registry.addInterceptor(interceptorHandler)
-                .addPathPatterns("/api/**")
+                .addPathPatterns("/**")
                 .excludePathPatterns(excludeList);
     }
 }

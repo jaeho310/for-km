@@ -13,6 +13,7 @@
           dense>
       </v-text-field>
       <v-text-field
+          type="password"
           label="password"
           v-model="password"
           outlined
@@ -40,6 +41,7 @@
 <script>
 import dialog from "@/utils/dialog";
 import api from "@/utils/api";
+import { sync } from "vuex-pathify"
 
 export default {
   name: "login",
@@ -65,8 +67,12 @@ export default {
       return new Promise((resolve, reject) => {
         try {
           if (res.data.success) {
+            console.log(document.cookie)
+            console.log('test!!')
+            dialog.makeDialog({text: `로그인되었습니다.`, callback: this.toHome})
           } else {
-            dialog.makeDialog({text: `${res.data.result.message}`})
+            console.log(res.data.result.message)
+            dialog.makeDialog({text: `로그인에 실패했습니다.`})
           }
           resolve()
         } catch (error) {
@@ -78,12 +84,19 @@ export default {
       api({
         url: "/api/members/login",
         method: "post",
+        data: {
+          'memberId': this.id,
+          'password': this.password
+        }
       })
         .then(this.loginResponseHandler)
         .catch(this.promiseRejectHandler)
     },
     toJoin() {
       this.$router.push("/join")
+    },
+    toHome() {
+      this.$router.push("/")
     }
   }
 }

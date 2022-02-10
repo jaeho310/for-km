@@ -1,5 +1,6 @@
 package com.example.projectsample.interfaces.controller.api;
 
+import com.example.projectsample.application.model.entity.Member;
 import com.example.projectsample.application.service.MemberService;
 import com.example.projectsample.interfaces.dto.MemberDto;
 import com.google.gson.Gson;
@@ -43,20 +44,23 @@ class MemberApiControllerTest {
 
     @Test
     @DisplayName("회원가입 테스트")
-    void 로그인테스트() throws Exception {
+    void 회원가입테스트() throws Exception {
         MemberDto memberDto = MemberDto.builder()
                 .memberId("kmong123")
+                .name("user1")
                 .password("abc")
                 .build();
 
-        given(memberService.insertMember(memberDto)).willReturn("success");
+        Member user1 = Member.builder().name("user1").build();
+
+        given(memberService.insertMember(memberDto)).willReturn(user1);
 
         mvc.perform(post("/api/members/join")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .content(gson.toJson(memberDto)))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("success")));
+                .andExpect(content().string(containsString("user1")));
     }
 
     @Test

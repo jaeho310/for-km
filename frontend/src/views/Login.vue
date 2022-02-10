@@ -45,6 +45,10 @@ import { sync } from "vuex-pathify"
 
 export default {
   name: "login",
+  computed: {
+    auth: sync("app/auth"),
+    authName: sync("app/authName")
+  },
   data() {
     return {
       id: '',
@@ -67,8 +71,8 @@ export default {
       return new Promise((resolve, reject) => {
         try {
           if (res.data.success) {
-            console.log(document.cookie)
-            console.log('test!!')
+            this.auth = true
+            this.authName = res.data.result.contents.name
             dialog.makeDialog({text: `로그인되었습니다.`, callback: this.toHome})
           } else {
             console.log(res.data.result.message)

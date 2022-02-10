@@ -11,15 +11,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "TB_MEMBER")
-public class Member {
+@Table(name = "TB_ORDER")
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String memberId;
-
-    private String password;
-
-    private String name;
+    private int count;
 }

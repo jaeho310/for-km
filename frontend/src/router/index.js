@@ -4,6 +4,7 @@ import Login from '@/views/Login'
 import Product from '@/views/Product'
 import Join from '@/views/Join'
 import OrderList from '@/views/OrderList'
+import ErrorPage from '@/views/ErrorPage'
 import Vue from 'vue'
 
 Vue.use(Router)
@@ -35,5 +36,10 @@ export default new Router({
       memberName: 'OrderList',
       component: OrderList
     },
+    {
+      path: '*',
+      name: 'Error',
+      component: ErrorPage
+    }
   ]
 })

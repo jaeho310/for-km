@@ -19,7 +19,8 @@ const state = {
       icon: ''
     },
   ],
-  auth: false
+  auth: false,
+  authName: ''
 }
 
 const mutations = make.mutations(state)

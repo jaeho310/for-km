@@ -2,9 +2,11 @@ package com.example.projectsample.interfaces.controller.api;
 
 import com.example.projectsample.application.service.MemberService;
 import com.example.projectsample.common.util.aop.ResponseJsonResult;
+import com.example.projectsample.common.util.exception.BusinessException;
 import com.example.projectsample.interfaces.dto.MemberDto;
 import com.example.projectsample.interfaces.dto.MemberLoginDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -51,5 +53,20 @@ public class MemberApiController {
         return memberService.isDuplicated(memberId);
     }
 
+    @GetMapping("/logout")
+    @ResponseJsonResult
+    public Object memberLogout(HttpSession httpSession) {
+        httpSession.invalidate();
+        return "";
+    }
 
+    @GetMapping("/login-check")
+    @ResponseJsonResult
+    public Object memberLoginCheck(HttpSession httpSession) {
+        Object data = httpSession.getAttribute("MemberInfo");
+        if (data == null) {
+            throw new BusinessException("로그인이 필요합니다");
+        }
+        return "";
+    }
 }

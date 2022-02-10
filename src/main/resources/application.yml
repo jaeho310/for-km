@@ -3,8 +3,8 @@ server:
 
 spring:
   datasource:
-    driverClassName: "org.h2.Driver"
-    url: "jdbc:h2:mem:test"
+    driverClassName: "net.sf.log4jdbc.sql.jdbcapi.DriverSpy"
+    url: "jdbc:log4jdbc:h2:mem:test"
     username: "sa"
     password: ""
   h2:
@@ -14,6 +14,10 @@ spring:
   devtools:
     livereload:
       enabled: true
+  sql:
+    init:
+      schema-locations: "classpath:schema.sql"
+      mode: never
 
 logging:
   level:

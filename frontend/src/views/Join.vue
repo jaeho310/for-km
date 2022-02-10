@@ -115,7 +115,7 @@ export default {
         method: "post",
         data: {
           'memberId': this.id,
-          'memberName': this.memberName,
+          'name': this.memberName,
           'password': this.password
         }
       })

@@ -3,11 +3,9 @@ package com.example.projectsample.interfaces.controller.api;
 import com.example.projectsample.application.model.entity.Member;
 import com.example.projectsample.application.service.OrderService;
 import com.example.projectsample.common.util.aop.ResponseJsonResult;
-import com.example.projectsample.interfaces.dto.MemberDto;
+import com.example.projectsample.interfaces.dto.OrderDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,10 +16,17 @@ public class OrderApiController {
 
     private final OrderService orderService;
 
-    @GetMapping("/")
+    @GetMapping("")
     @ResponseJsonResult
     public Object getOrderList(HttpSession httpSession) {
         Member memberInfo = (Member) httpSession.getAttribute("memberInfo");
-        return orderService.getOrderList(memberInfo.getMemberId());
+        return orderService.getOrderListByMemberId(memberInfo.getId());
+    }
+
+    @PostMapping("")
+    @ResponseJsonResult
+    public Object newOrder(HttpSession httpSession, @RequestBody OrderDto orderDto) {
+        Member memberInfo = (Member) httpSession.getAttribute("memberInfo");
+        return orderService.insertOrder(memberInfo.getId(), orderDto.getCount(), orderDto.getProductName());
     }
 }

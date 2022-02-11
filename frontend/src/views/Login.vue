@@ -89,7 +89,7 @@ export default {
         url: "/api/members/login",
         method: "post",
         data: {
-          'memberId': this.id,
+          'customMemberId': this.id,
           'password': this.password
         }
       })

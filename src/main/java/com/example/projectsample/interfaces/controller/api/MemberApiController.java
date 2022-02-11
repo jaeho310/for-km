@@ -1,5 +1,6 @@
 package com.example.projectsample.interfaces.controller.api;
 
+import com.example.projectsample.application.model.entity.Member;
 import com.example.projectsample.application.service.MemberService;
 import com.example.projectsample.common.util.aop.ResponseJsonResult;
 import com.example.projectsample.common.util.exception.BusinessException;
@@ -39,7 +40,7 @@ public class MemberApiController {
     @PostMapping("/login")
     @ResponseJsonResult
     public Object userLogin(HttpSession httpSession, @RequestBody MemberLoginDto memberLoginDto) {
-        return memberService.memberLogin(memberLoginDto.getMemberId(), memberLoginDto.getPassword(), httpSession);
+        return memberService.memberLogin(memberLoginDto.getCustomMemberId(), memberLoginDto.getPassword(), httpSession);
     }
 
     /**
@@ -63,10 +64,10 @@ public class MemberApiController {
     @GetMapping("/login-check")
     @ResponseJsonResult
     public Object memberLoginCheck(HttpSession httpSession) {
-        Object data = httpSession.getAttribute("MemberInfo");
-        if (data == null) {
-            throw new BusinessException("로그인이 필요합니다");
-        }
+//        Object data = httpSession.getAttribute("MemberInfo");
+//        if (data == null) {
+//            throw new BusinessException("로그인이 필요합니다");
+//        }
         return "";
     }
 }

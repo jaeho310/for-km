@@ -114,7 +114,7 @@ export default {
         url: "/api/members/join",
         method: "post",
         data: {
-          'memberId': this.id,
+          'customMemberId': this.id,
           'name': this.memberName,
           'password': this.password
         }

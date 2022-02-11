@@ -1,6 +1,8 @@
 package com.example.projectsample.infrastructure.component;
 
+import com.example.projectsample.application.model.entity.Member;
 import com.example.projectsample.application.model.entity.Product;
+import com.example.projectsample.application.repository.MemberRepository;
 import com.example.projectsample.application.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ class SimpleListener {
 
     private final ProductRepository productRepository;
 
+    private final MemberRepository memberRepository;
+
     @EventListener({ContextRefreshedEvent.class})
     public void contextRefreshedEvent() {
         List<Product> products = new ArrayList<>();
@@ -34,5 +38,8 @@ class SimpleListener {
         products.add(Product.builder().name("이어폰").price(5000).build());
         products.add(Product.builder().name("냉장고").price(10000).build());
         productRepository.saveAll(products);
+
+        Member member = Member.builder().customMemberId("admin").password("admin").build();
+        memberRepository.save(member);
     }
 }

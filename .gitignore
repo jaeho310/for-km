@@ -50,7 +50,6 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Editor directories and files
-.idea
 .vscode
 *.suo
 *.ntvs*
@@ -58,3 +57,7 @@ pnpm-debug.log*
 *.sln
 *.sw?
 /src/main/resources/static/
+
+frontend/node
+frontend/node_modules
+*.http

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductApiController {
     private final ProductService productService;
 
-    @GetMapping("/")
+    @GetMapping("")
     @ResponseJsonResult
     public Object getProductList() {
         return productService.getProductList();

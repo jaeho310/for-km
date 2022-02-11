@@ -5,13 +5,11 @@ import com.example.projectsample.application.repository.MemberRepository;
 import com.example.projectsample.common.util.exception.BusinessException;
 import com.example.projectsample.interfaces.dto.MemberDto;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.net.HttpCookie;
 import java.util.Optional;
 
 @Service
@@ -29,7 +27,7 @@ public class MemberService {
      * @return
      */
     public Member insertMember(MemberDto memberDto) {
-        if (isDuplicated(memberDto.getMemberId())) {
+        if (isDuplicated(memberDto.getCustomMemberId())) {
             throw new BusinessException("중복체크가 되지 않은 요청입니다.");
         }
         memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
@@ -38,7 +36,7 @@ public class MemberService {
     }
 
     public boolean isDuplicated(String memberId) {
-        Optional<Member> member = memberRepository.findByMemberId(memberId);
+        Optional<Member> member = memberRepository.findByCustomMemberId(memberId);
         return member.isPresent();
     }
 
@@ -49,7 +47,7 @@ public class MemberService {
      * @param password 사용자가 입력한 비밀번호
      */
     public Object memberLogin(String memberId, String password, HttpSession httpSession) {
-        Member member = memberRepository.findByMemberId(memberId)
+        Member member = memberRepository.findByCustomMemberId(memberId)
                 .orElseThrow(() -> new BusinessException("등록되지 않은 사용자입니다"));
         if (passwordEncoder.matches(password, member.getPassword())) {
             httpSession.setAttribute("MemberInfo", member);

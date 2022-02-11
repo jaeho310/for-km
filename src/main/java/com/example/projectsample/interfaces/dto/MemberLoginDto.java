@@ -9,7 +9,7 @@ import lombok.Setter;
 public class MemberLoginDto {
 
     @NonNull
-    String memberId;
+    String customMemberId;
 
     @NonNull
     String password;

@@ -93,6 +93,7 @@
 
 <script>
 import dialog from "@/utils/dialog";
+import api from "@/utils/api";
 export default {
   name: "Product",
   data() {
@@ -118,32 +119,14 @@ export default {
         },
       ],
       productListTableBody: [
-        {
-          'name': 'a',
-          'price': 100,
-          'id': 1,
-        },
-        {
-          'name': 'b',
-          'price': 200,
-          'id': 2,
-        },
-        {
-          'name': '사과',
-          'price': 300,
-          'id': 3,
-        },
-        {
-          'name': '사과',
-          'price': 300,
-          'id': 3,
-        },
       ]
     }
   },
+
   mounted() {
     this.tableHeight = String(window.innerHeight - 300)
     window.addEventListener('resize', this.handleResize);
+    this.getProductList()
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.handleResize);
@@ -168,9 +151,27 @@ export default {
         return
       }
       console.log(this.selectedProductInfo)
+    },
+    getProductList() {
+      api({
+        url: '/api/products',
+        method: "get"
+      })
+          .then(res=> {
+            console.log(res)
+            if (res.data.success) {
+              console.log(res.data.result)
+              this.productListTableBody = res.data.result.contents
+            } else {
+              dialog.makeDialog({text: "상품목록을 받아오지 못했습니다."})
+              console.log(res.data.result.message)
+            }
+          })
+          .catch(err => {
+            dialog.makeDialog({text: "상품목록을 받아오지 못했습니다."})
+          })
     }
   }
-
 }
 </script>
 

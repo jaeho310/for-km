@@ -64,10 +64,10 @@ public class MemberApiController {
     @GetMapping("/login-check")
     @ResponseJsonResult
     public Object memberLoginCheck(HttpSession httpSession) {
-//        Object data = httpSession.getAttribute("MemberInfo");
-//        if (data == null) {
-//            throw new BusinessException("로그인이 필요합니다");
-//        }
+        Object data = httpSession.getAttribute("MemberInfo");
+        if (data == null) {
+            throw new BusinessException("로그인이 필요합니다");
+        }
         return "";
     }
 }

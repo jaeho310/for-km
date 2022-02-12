@@ -12,18 +12,18 @@ public abstract class AbstractCommonTest {
 //    @Autowired
 //    private WebApplicationContext context;
 
-    protected MockMvc mockMvc;
-
-    protected MockHttpSession mockSession;
-
-    @BeforeEach
-    public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(documentationConfiguration(restDocumentation).operationPreprocessors()
-                        .withResponseDefaults(prettyPrint()))
-                .apply(springSecurity()).addFilters(new CharacterEncodingFilter("UTF-8", true)).build();
-
-        this.mockSession = new MockHttpSession();
-    }
+//    protected MockMvc mockMvc;
+//
+//    protected MockHttpSession mockSession;
+//
+//    @BeforeEach
+//    public void setup() {
+//        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+//                .apply(documentationConfiguration(restDocumentation).operationPreprocessors()
+//                        .withResponseDefaults(prettyPrint()))
+//                .apply(springSecurity()).addFilters(new CharacterEncodingFilter("UTF-8", true)).build();
+//
+//        this.mockSession = new MockHttpSession();
+//    }
 
 }

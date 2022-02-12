@@ -34,6 +34,9 @@
 </template>
 
 <script>
+import api from "@/utils/api";
+import dialog from "@/utils/dialog";
+
 export default {
   name: "OrderList",
   data() {
@@ -62,19 +65,13 @@ export default {
         },
       ],
       orderListTableBody: [
-        {
-          'name': 'a',
-          'price': 100,
-          'count': 1,
-          'orderDate': '2012',
-          'totalPrice': 100
-        },
-      ]
+      ],
     }
   },
   mounted() {
     this.tableHeight = String(window.innerHeight - 200)
     window.addEventListener('resize', this.handleResize);
+    this.getOrderList()
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.handleResize);
@@ -83,9 +80,25 @@ export default {
     handleResize() {
       console.log('test')
       this.tableHeight = String(window.innerHeight - 200)
+    },
+    getOrderList() {
+      api({
+        url: '/api/order',
+        method: "get"
+      })
+          .then(res => {
+            if (res.data.success) {
+              this.orderListTableBody = res.data.result.contents
+            } else {
+              dialog.makeDialog({text: "주문목록을 받아오지 못했습니다."})
+              console.log(res.data.result.message)
+            }
+          })
+          .catch(err => {
+            dialog.makeDialog({text: "상품목록을 받아오지 못했습니다."})
+          })
     }
-  }
-
+  },
 }
 </script>
 

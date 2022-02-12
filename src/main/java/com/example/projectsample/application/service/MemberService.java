@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -46,6 +47,7 @@ public class MemberService {
      * @param memberId 사용자가 입력한 아이디
      * @param password 사용자가 입력한 비밀번호
      */
+    @Transactional
     public Object memberLogin(String memberId, String password, HttpSession httpSession) {
         Member member = memberRepository.findByCustomMemberId(memberId)
                 .orElseThrow(() -> new BusinessException("등록되지 않은 사용자입니다"));

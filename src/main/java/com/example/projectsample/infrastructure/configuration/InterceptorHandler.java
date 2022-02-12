@@ -24,17 +24,17 @@ public class InterceptorHandler extends HttpServlet implements HandlerIntercepto
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        HttpSession session = request.getSession();
-//        Object data = session.getAttribute("MemberInfo");
-//        if (data == null) {
-//            response.sendRedirect("/login");
-//            return false;
-//        }
-//        // url을 직접 입력하는 경우 home 컴포넌트로 랜더링
-//        if (Arrays.asList(this.routerList).contains(request.getRequestURI())) {
-//            response.sendRedirect("/");
-//            return false;
-//        }
+        HttpSession session = request.getSession();
+        Object data = session.getAttribute("MemberInfo");
+        if (data == null) {
+            response.sendRedirect("/login");
+            return false;
+        }
+        // url을 직접 입력하는 경우 home 컴포넌트로 랜더링
+        if (Arrays.asList(this.routerList).contains(request.getRequestURI())) {
+            response.sendRedirect("/");
+            return false;
+        }
         return true;
     }
 

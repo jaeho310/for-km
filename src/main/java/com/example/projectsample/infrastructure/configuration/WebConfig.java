@@ -62,7 +62,7 @@ class WebConfig implements WebMvcConfigurer {
         excludeList.add("/h2/**");
 
         registry.addInterceptor(interceptorHandler)
-//                .addPathPatterns("/**")
+                .addPathPatterns("/**")
                 .excludePathPatterns(excludeList);
     }
 }

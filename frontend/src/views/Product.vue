@@ -145,12 +145,35 @@ export default {
       this.selectedProductInfo.price = row.price
       this.selectedProductInfo.id = row.id
     },
+    toOrderList() {
+      this.$router.push('order-list')
+    },
     order() {
       if (this.selectedProductInfo.name === "" || this.selectedProductInfo.count === 0) {
         dialog.makeDialog({text: '올바르지 않은 주문입니다.'})
         return
       }
-      console.log(this.selectedProductInfo)
+      api({
+        url: '/api/order',
+        method: "post",
+        data: {
+          'productName': this.selectedProductInfo.name,
+          'count': this.selectedProductInfo.count
+        }
+      })
+          .then(res=> {
+            console.log(res)
+            if (res.data.success) {
+              dialog.makeDialog({text: "주문이 완료되었습니다.", callback: this.toOrderList})
+            } else {
+              dialog.makeDialog({text: "시스템 에러로 주문에 실패하였습니다."})
+              console.log(res.data.result.message)
+            }
+          })
+          .catch(err => {
+            dialog.makeDialog({text: "시스템 에러로 주문에 실패하였습니다."})
+            console.log(err)
+          })
     },
     getProductList() {
       api({

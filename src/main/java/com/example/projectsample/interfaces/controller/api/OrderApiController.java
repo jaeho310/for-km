@@ -19,14 +19,14 @@ public class OrderApiController {
     @GetMapping("")
     @ResponseJsonResult
     public Object getOrderList(HttpSession httpSession) {
-        Member memberInfo = (Member) httpSession.getAttribute("memberInfo");
+        Member memberInfo = (Member) httpSession.getAttribute("MemberInfo");
         return orderService.getOrderListByMemberId(memberInfo.getId());
     }
 
     @PostMapping("")
     @ResponseJsonResult
     public Object newOrder(HttpSession httpSession, @RequestBody OrderDto orderDto) {
-        Member memberInfo = (Member) httpSession.getAttribute("memberInfo");
+        Member memberInfo = (Member) httpSession.getAttribute("MemberInfo");
         return orderService.insertOrder(memberInfo.getId(), orderDto.getCount(), orderDto.getProductName());
     }
 }

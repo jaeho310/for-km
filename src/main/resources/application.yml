@@ -14,12 +14,11 @@ spring:
   devtools:
     livereload:
       enabled: true
-  sql:
-    init:
-      schema-locations: "classpath:schema.sql"
-      mode: never
-
+  jpa:
+    open-in-view: off
 logging:
   level:
     root: "info"
     org.springframework: "info"
+
+

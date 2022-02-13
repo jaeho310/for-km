@@ -20,5 +20,8 @@ public class MemberJoinRequestDto {
     @NonNull
     private String name;
 
+    @NonNull
+    private String email;
+
 //    private Role role;
 }

@@ -40,15 +40,12 @@ public class MemberService {
             return true;
         }
         Optional<Member> memberByEmail = memberRepository.findByEmail(email);
-        if (memberByEmail.isPresent()) {
-            return true;
-        }
-        return false;
+        return memberByEmail.isPresent();
     }
 
     /**
      * db에 복호화된 password와 유저가 입력한 password를 복호화한 값이 같은지 비교
-     * 로그인 성공시 20분의 유지시간을 가진 세션 부여
+     * 로그인 성공시 20분동안 세션 부여
      * @param memberId 사용자가 입력한 아이디
      * @param password 사용자가 입력한 비밀번호
      */

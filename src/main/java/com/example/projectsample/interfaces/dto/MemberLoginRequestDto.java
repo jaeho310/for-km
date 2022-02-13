@@ -13,7 +13,4 @@ public class MemberLoginRequestDto {
 
     @NonNull
     String password;
-
-    @NonNull
-    String email;
 }

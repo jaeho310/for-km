@@ -3,8 +3,11 @@ package com.example.projectsample.application.model.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -12,6 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "TB_ORDER")
+@EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Order {
     @Id
@@ -31,6 +35,9 @@ public class Order {
     @JoinColumn(name = "product_id")
     @Setter
     private Product product;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     public void setMember(Member member) {
         if (this.member != null) {

@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ class SimpleListener {
     private final ProductRepository productRepository;
 
     private final MemberRepository memberRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @EventListener({ContextRefreshedEvent.class})
     public void contextRefreshedEvent() {
@@ -39,7 +42,13 @@ class SimpleListener {
         products.add(Product.builder().name("냉장고").price(10000).build());
         productRepository.saveAll(products);
 
-        Member member = Member.builder().customMemberId("admin").password("admin").build();
+        String id = "admin";
+        String password = "admin";
+        Member member = Member.builder()
+                .customMemberId("admin")
+                .password(passwordEncoder.encode(password))
+                .build();
+
         memberRepository.save(member);
     }
 }

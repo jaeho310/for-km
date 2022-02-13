@@ -18,9 +18,8 @@
             v-slot:item="{ item, index }"
         >
           <tr
-              :data-category-id="orderListTableHeader.id"
-              :data-id="item.name">
-            <td>{{ item.name }}</td>
+              :data-category-id="orderListTableHeader.id">
+            <td>{{ item.productName }}</td>
             <td>{{ item.price }}</td>
             <td>{{ item.count }}</td>
             <td>{{ item.orderDate }}</td>
@@ -45,7 +44,7 @@ export default {
       orderListTableHeader: [
         {
           text: '상품명',
-          value: 'name',
+          value: 'productName',
         },
         {
           text: '가격',
@@ -89,14 +88,23 @@ export default {
           .then(res => {
             if (res.data.success) {
               console.log(res.data.result.contents)
-              this.orderListTableBody = res.data.result.contents
+              for (let value of res.data.result.contents) {
+                this.orderListTableBody.push({
+                  'productName': value.product.name,
+                  'count': value.count,
+                  'price': value.product.price,
+                  'orderDate': value.createdAt,
+                  'totalPrice': value.product.price * value.count
+                })
+              }
             } else {
               dialog.makeDialog({text: "주문내역을 받아오지 못했습니다."})
               console.log(res.data.result.message)
             }
           })
           .catch(err => {
-            dialog.makeDialog({text: "상품목록을 받아오지 못했습니다."})
+            console.log(err)
+            dialog.makeDialog({text: "주문내역을 받아오지 못했습니다."})
           })
     }
   },

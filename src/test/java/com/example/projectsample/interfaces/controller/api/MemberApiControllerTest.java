@@ -1,8 +1,10 @@
 package com.example.projectsample.interfaces.controller.api;
 
+import com.example.projectsample.application.model.dto.MemberResponseDto;
 import com.example.projectsample.application.model.entity.Member;
 import com.example.projectsample.application.service.MemberService;
 import com.example.projectsample.interfaces.dto.MemberJoinRequestDto;
+import com.example.projectsample.interfaces.dto.MemberLoginRequestDto;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.containsString;
@@ -46,7 +50,7 @@ class MemberApiControllerTest {
 
     @Test
     @DisplayName("회원가입 테스트")
-    void 회원가입테스트() throws Exception {
+    void joinTest() throws Exception {
         MemberJoinRequestDto memberJoinRequestDto = MemberJoinRequestDto.builder()
                 .customMemberId("kmong123")
                 .name("user1")
@@ -67,7 +71,7 @@ class MemberApiControllerTest {
 
     @Test
     @DisplayName("중복확인 테스트")
-    void 중복확인테스트() throws Exception {
+    void duplicateTest() throws Exception {
         String memberId = "abc";
         String email = "a@gmail.com";
         given(memberService.isDuplicated(memberId, email)).willReturn(false);
@@ -79,5 +83,28 @@ class MemberApiControllerTest {
                         .params(queryParams))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("false")));
+    }
+
+    @Test
+    @DisplayName("로그아웃 테스트")
+    void logoutTest() throws Exception {
+        mvc.perform(get("/api/members/logout"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("로그인 테스트")
+    void loginTest() throws Exception {
+        String id = "mockId";
+        String password = "mockPassword";
+        MemberLoginRequestDto req = new MemberLoginRequestDto();
+        req.setCustomMemberId(id);
+        req.setPassword(password);
+//        given(memberService.memberLogin(id, password, any()))
+//                .willReturn(MemberResponseDto.builder().customMemberId(id).build());
+
+        mvc.perform(get("/api/members/login"))
+                .andExpect(status().isOk());
+//                .andExpect(content().string(containsString("mockId")));
     }
 }

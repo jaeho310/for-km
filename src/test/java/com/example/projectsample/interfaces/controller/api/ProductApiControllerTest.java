@@ -1,5 +1,6 @@
 package com.example.projectsample.interfaces.controller.api;
 
+import com.example.projectsample.application.model.entity.Member;
 import com.example.projectsample.application.service.ProductService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,8 +37,8 @@ class ProductApiControllerTest {
     @Test
     void getProducts() throws Exception {
         mvc.perform(get("/api/products")
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andDo(print());
+                        .with(csrf())
+                        .sessionAttr("MemberInfo", Member.builder().id(1L).build()))
+                .andExpect(status().isOk());
     }
 }

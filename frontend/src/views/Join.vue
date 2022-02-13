@@ -23,6 +23,7 @@
       <v-text-field
           label="email"
           v-model="email"
+          @click="isDuplicated=true"
           outlined
           dense>
       </v-text-field>
@@ -97,7 +98,7 @@ export default {
             if (res.data.result.contents) {
               dialog.makeDialog({text: `중복된 아이디입니다.`})
             } else {
-              dialog.makeDialog({text: `회원가입이 가능한 아이디입니다.`})
+              dialog.makeDialog({text: `회원가입이 가능한 아이디와 이메일입니다.`})
               this.isDuplicated = false
             }
           } else {
@@ -110,7 +111,7 @@ export default {
       })
     },
     join() {
-      if (this.id === '' || this.password === '' || this.memberName === '') {
+      if (this.id === '' || this.password === '' || this.memberName === '' || this.email === '') {
         dialog.makeDialog({text: '필수정보를 모두 입력해주세요'})
         return
       }
@@ -127,7 +128,8 @@ export default {
         data: {
           'customMemberId': this.id,
           'name': this.memberName,
-          'password': this.password
+          'password': this.password,
+          'email': this.email
         }
       })
           .then(res => {

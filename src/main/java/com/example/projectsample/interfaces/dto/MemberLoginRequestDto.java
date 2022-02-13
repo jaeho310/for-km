@@ -6,11 +6,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MemberLoginDto {
+public class MemberLoginRequestDto {
 
     @NonNull
     String customMemberId;
 
     @NonNull
     String password;
+
+    @NonNull
+    String email;
 }

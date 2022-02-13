@@ -88,9 +88,10 @@ export default {
       })
           .then(res => {
             if (res.data.success) {
+              console.log(res.data.result.contents)
               this.orderListTableBody = res.data.result.contents
             } else {
-              dialog.makeDialog({text: "주문목록을 받아오지 못했습니다."})
+              dialog.makeDialog({text: "주문내역을 받아오지 못했습니다."})
               console.log(res.data.result.message)
             }
           })

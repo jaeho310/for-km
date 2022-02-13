@@ -1,5 +1,6 @@
 package com.example.projectsample.application.service;
 
+import com.example.projectsample.application.model.dto.OrderResponseDto;
 import com.example.projectsample.application.model.entity.Member;
 import com.example.projectsample.application.model.entity.Order;
 import com.example.projectsample.application.model.entity.Product;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,12 +26,20 @@ public class OrderService {
     private final MemberRepository memberRepository;
 
 
-    public List<Order> getOrderListByMemberId(Long memberId) {
-        return orderRepository.findAllByMemberId(memberId);
+    public List<OrderResponseDto> getOrderListByMemberId(Long memberId) {
+        List<Order> orders = orderRepository.findAllByMemberId(memberId);
+        List<OrderResponseDto> response = new ArrayList<>();
+        for (Order order : orders) {
+            response.add(OrderResponseDto.builder()
+                    .count(order.getCount())
+                    .product(order.getProduct())
+                    .build());
+        }
+        return response;
     }
 
     @Transactional
-    public Order insertOrder(Long memberId, int count, String productName) {
+    public OrderResponseDto insertOrder(Long memberId, int count, String productName) {
         Product product = productRepository.findByName(productName).orElseThrow(
                 () -> {
                     throw new BusinessException("상품정보가 존재하지 않습니다");
@@ -39,6 +49,10 @@ public class OrderService {
                     throw new BusinessException("사용자 정보가 존재하지 않습니다");
                 });
         Order order = Order.builder().product(product).count(count).member(member).build();
-        return orderRepository.save(order);
+        Order o = orderRepository.save(order);
+        return OrderResponseDto.builder()
+                .count(o.getCount())
+                .product(o.getProduct())
+                .build();
     }
 }

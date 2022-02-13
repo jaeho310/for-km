@@ -7,18 +7,13 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
-public class MemberDto {
+public class OrderRequestDto {
 
     private Long id;
 
     @NonNull
-    private String customMemberId;
+    private int count;
 
     @NonNull
-    private String password;
-
-    @NonNull
-    private String name;
-
-//    private Role role;
+    private String productName;
 }

@@ -21,6 +21,12 @@
           dense>
       </v-text-field>
       <v-text-field
+          label="email"
+          v-model="email"
+          outlined
+          dense>
+      </v-text-field>
+      <v-text-field
           label="name"
           v-model="memberName"
           outlined
@@ -56,6 +62,7 @@ export default {
       id: '',
       password: '',
       memberName: '',
+      email: '',
       isDuplicated: true
     }
   },
@@ -66,11 +73,15 @@ export default {
     },
     checkDuplicated() {
       if (this.id === '') {
-        dialog.makeDialog({text: '먼저 아이디를 입력해주세요'})
+        dialog.makeDialog({text: '아이디를 입력해주세요'})
+        return
+      }
+      if (this.email === '') {
+        dialog.makeDialog({text: '이메일을 입력해주세요'})
         return
       }
       api({
-        url: `/api/members/${this.id}/exist`,
+        url: `/api/members/exist?memberId=${this.id}&email=${this.email}`,
         method: "get",
       })
           .then(this.duplicatedResponseHandler)

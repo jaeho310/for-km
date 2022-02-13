@@ -14,7 +14,7 @@ const state = {
       icon: ''
     },
     {
-      title: '주문목록',
+      title: '주문내역',
       to : '/order-list',
       icon: ''
     },

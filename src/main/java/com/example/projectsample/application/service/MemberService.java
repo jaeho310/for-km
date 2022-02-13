@@ -1,9 +1,10 @@
 package com.example.projectsample.application.service;
 
+import com.example.projectsample.application.model.dto.MemberResponseDto;
 import com.example.projectsample.application.model.entity.Member;
 import com.example.projectsample.application.repository.MemberRepository;
 import com.example.projectsample.common.util.exception.BusinessException;
-import com.example.projectsample.interfaces.dto.MemberDto;
+import com.example.projectsample.interfaces.dto.MemberJoinRequestDto;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,21 +25,25 @@ public class MemberService {
     private final ModelMapper modelMapper;
     /**
      * 회원가입 메서드
-     * @param memberDto 사용자정보를 담는 dto
-     * @return
+     * @param memberJoinRequestDto 사용자정보를 담는 dto
+     * @return Member
      */
-    public Member insertMember(MemberDto memberDto) {
-        if (isDuplicated(memberDto.getCustomMemberId())) {
-            throw new BusinessException("중복체크가 되지 않은 요청입니다.");
-        }
-        memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
-        Member member = modelMapper.map(memberDto, Member.class);
+    public Member insertMember(MemberJoinRequestDto memberJoinRequestDto) {
+        memberJoinRequestDto.setPassword(passwordEncoder.encode(memberJoinRequestDto.getPassword()));
+        Member member = modelMapper.map(memberJoinRequestDto, Member.class);
         return memberRepository.save(member);
     }
 
-    public boolean isDuplicated(String memberId) {
-        Optional<Member> member = memberRepository.findByCustomMemberId(memberId);
-        return member.isPresent();
+    public boolean isDuplicated(String memberId, String email) {
+        Optional<Member> memberByMemberId = memberRepository.findByCustomMemberId(memberId);
+        if (memberByMemberId.isPresent()) {
+            return true;
+        }
+        Optional<Member> memberByEmail = memberRepository.findByEmail(email);
+        if (memberByEmail.isPresent()) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -48,13 +53,18 @@ public class MemberService {
      * @param password 사용자가 입력한 비밀번호
      */
     @Transactional
-    public Object memberLogin(String memberId, String password, HttpSession httpSession) {
+    public MemberResponseDto memberLogin(String memberId, String password, HttpSession httpSession) {
         Member member = memberRepository.findByCustomMemberId(memberId)
                 .orElseThrow(() -> new BusinessException("등록되지 않은 사용자입니다"));
         if (passwordEncoder.matches(password, member.getPassword())) {
             httpSession.setAttribute("MemberInfo", member);
             httpSession.setMaxInactiveInterval(20*60);
-            return member;
+            return MemberResponseDto.builder()
+                    .name(member.getName())
+                    .customMemberId(member.getCustomMemberId())
+                    .name(member.getName())
+                    .email(member.getEmail())
+                    .build();
         } else {
             throw new BusinessException("비밀번호가 일치하지 않습니다.");
         }

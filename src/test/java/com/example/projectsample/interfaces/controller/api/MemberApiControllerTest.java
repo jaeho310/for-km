@@ -2,7 +2,7 @@ package com.example.projectsample.interfaces.controller.api;
 
 import com.example.projectsample.application.model.entity.Member;
 import com.example.projectsample.application.service.MemberService;
-import com.example.projectsample.interfaces.dto.MemberDto;
+import com.example.projectsample.interfaces.dto.MemberJoinRequestDto;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
+import java.util.Map;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,7 +47,7 @@ class MemberApiControllerTest {
     @Test
     @DisplayName("회원가입 테스트")
     void 회원가입테스트() throws Exception {
-        MemberDto memberDto = MemberDto.builder()
+        MemberJoinRequestDto memberJoinRequestDto = MemberJoinRequestDto.builder()
                 .customMemberId("kmong123")
                 .name("user1")
                 .password("abc")
@@ -59,7 +60,7 @@ class MemberApiControllerTest {
         mvc.perform(post("/api/members/join")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
-                .content(gson.toJson(memberDto)))
+                .content(gson.toJson(memberJoinRequestDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("user1")));
     }
@@ -68,9 +69,14 @@ class MemberApiControllerTest {
     @DisplayName("중복확인 테스트")
     void 중복확인테스트() throws Exception {
         String memberId = "abc";
-        given(memberService.isDuplicated(memberId)).willReturn(false);
-        String format = String.format("/api/members/%s/exist", memberId);
-        mvc.perform(get(format))
+        String email = "a@gmail.com";
+        given(memberService.isDuplicated(memberId, email)).willReturn(false);
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("memberId", memberId);
+        queryParams.add("email", email);
+
+        mvc.perform(get("/api/members/exist")
+                        .params(queryParams))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("false")));
     }

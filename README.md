@@ -141,6 +141,7 @@ CMD ["java", "-jar", "/app/service.jar"]
 앨리스터 코오번의 Hexagonal Architecture 를 적용하였습니다.
 스프링은 블락화된 애플리케이션으로 스프링 컨테이너에서 di, ioc를 받아 사용합니다.
 aop 등 추상화나 프록시객체가 필요한경우 스프링의 도움을 받아 진행하였습니다. 
+layer는 presentation(interface) 계층, application(Business Layer, persistence Laye) 계층, infrastructure(스프링 필터 인터셉터) 계층으로 나눴습니다.
 ```
 
 ## 3. 테이블 정보

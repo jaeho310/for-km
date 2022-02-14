@@ -1,10 +1,10 @@
 <template>
   <v-container
       id="error-view"
-      class="fill-height text-center"
+      class="fill-height text-center mt-15"
       tag="section"
   >
-    <v-row justify="center">
+    <v-row justify="center" class="mt-15">
       <v-col cols="auto">
         <h1 class="text-h1 mb-16 font-weight-bold">
           404

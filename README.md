@@ -103,7 +103,9 @@ public class ResponseJsonResultAdvice {
 ```
 프론트엔드도 같은 포트를 사용합니다.  
 메이븐 플러그인을 추가하여 maven 빌드시 yarn 빌드를 통해 프론트엔드 빌드도 함께 진행하며   
-resources/static 에 spa 프레임워크로 구축된 index.html파일이 생성됩니다.  
+필드 결과물로 resources/static 에 spa 프레임워크로 구축된 index.html파일이 생성됩니다.  
+멀티스테이지를 사용하여 빌드시에는 maven-jdk-11을 베이스 이미지로 사용하고 런타임에는 jdk11-slim를 사용하여
+이미지를 보다 가볍게 구축하였습니다.
 ```
 ```dockerfile
 ARG BUILD_IMAGE=maven:3.8-jdk-11
@@ -142,6 +144,90 @@ CMD ["java", "-jar", "/app/service.jar"]
 스프링은 블락화된 애플리케이션으로 스프링 컨테이너에서 di, ioc를 받아 사용합니다.
 aop 등 추상화나 프록시객체가 필요한경우 스프링의 도움을 받아 진행하였습니다. 
 layer는 presentation(interface) 계층, application(Business Layer, persistence Layer) 계층, infrastructure(스프링 필터 인터셉터) 계층으로 나눴습니다.
+```
+```
+|-- src
+|   |-- main
+|   |   |-- java
+|   |   |   `-- com
+|   |   |       `-- example
+|   |   |           `-- projectsample
+|   |   |               |-- ProjectSampleApplication.java
+|   |   |               |-- application
+|   |   |               |   |-- model
+|   |   |               |   |   |-- config
+|   |   |               |   |   |   |-- ConfigContext.java
+|   |   |               |   |   |   |-- JpaConfig.java
+|   |   |               |   |   |   `-- LoginUserAuditorAware.java
+|   |   |               |   |   |-- dto
+|   |   |               |   |   |   |-- MemberResponseDto.java
+|   |   |               |   |   |   |-- OrderResponseDto.java
+|   |   |               |   |   |   `-- ProductResponseDto.java
+|   |   |               |   |   `-- entity
+|   |   |               |   |       |-- Member.java
+|   |   |               |   |       |-- Order.java
+|   |   |               |   |       `-- Product.java
+|   |   |               |   |-- repository
+|   |   |               |   |   |-- MemberRepository.java
+|   |   |               |   |   |-- OrderRepository.java
+|   |   |               |   |   `-- ProductRepository.java
+|   |   |               |   `-- service
+|   |   |               |       |-- MemberService.java
+|   |   |               |       |-- OrderService.java
+|   |   |               |       `-- ProductService.java
+|   |   |               |-- common
+|   |   |               |   `-- util
+|   |   |               |       |-- aop
+|   |   |               |       |   |-- ResponseJsonResult.java
+|   |   |               |       |   `-- ResponseJsonResultAdvice.java
+|   |   |               |       |-- exception
+|   |   |               |       |   |-- BusinessException.java
+|   |   |               |       |   `-- RestControllerExceptionAdvice.java
+|   |   |               |       `-- result
+|   |   |               |           |-- JsonResult.java
+|   |   |               |           |-- JsonResultFail.java
+|   |   |               |           `-- JsonResultSuccess.java
+|   |   |               |-- infrastructure
+|   |   |               |   |-- component
+|   |   |               |   |   `-- SimpleListener.java
+|   |   |               |   `-- configuration
+|   |   |               |       |-- InterceptorHandler.java
+|   |   |               |       |-- SecurityConfig.java
+|   |   |               |       `-- WebConfig.java
+|   |   |               `-- interfaces
+|   |   |                   |-- controller
+|   |   |                   |   `-- api
+|   |   |                   |       |-- MemberApiController.java
+|   |   |                   |       |-- OrderApiController.java
+|   |   |                   |       `-- ProductApiController.java
+|   |   |                   `-- dto
+|   |   |                       |-- MemberJoinRequestDto.java
+|   |   |                       |-- MemberLoginRequestDto.java
+|   |   |                       |-- OrderRequestDto.java
+|   |   |                       `-- Role.java
+|   |   `-- resources
+|   |       |-- application.yml
+|   |       |-- log4jdbc.log4j2.properties
+|   |       `-- logback.xml
+|   `-- test
+|       `-- java
+|           `-- com
+|               `-- example
+|                   `-- projectsample
+|                       |-- AbstractCommonTest.java
+|                       |-- ProjectSampleApplicationTests.java
+|                       |-- application
+|                       |   `-- service
+|                       |       |-- MemberServiceTest.java
+|                       |       |-- OrderServiceTest.java
+|                       |       `-- ProductServiceTest.java
+|                       `-- interfaces
+|                           `-- controller
+|                               `-- api
+|                                   |-- MemberApiControllerTest.java
+|                                   |-- OrderApiControllerTest.java
+|                                   `-- ProductApiControllerTest.java
+
 ```
 
 ## 3. 테이블 정보

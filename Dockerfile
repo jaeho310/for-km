@@ -6,12 +6,13 @@ ARG RUNTIME_IMAGE=openjdk:11-jdk-slim
 #############################################################################################
 ###              Stage where Docker is building spring boot app using maven               ###
 #############################################################################################
-FROM dependencies as build
+FROM ${BUILD_IMAGE} AS build
 
 COPY src ./src
 COPY frontend ./frontend
+COPY pom.xml ./
 
-RUN mvn -B clean package
+RUN mvn -B clean package -DskipTests
 #        -DproxySet=${PROXY_SET} \
 #        -DproxyHost=${PROXY_HOST} \
 #        -DproxyPort=${PROXY_PORT}
@@ -23,7 +24,7 @@ RUN mvn -B clean package
 #############################################################################################
 FROM ${RUNTIME_IMAGE}
 
-COPY --from=build /target/iris-monitoring-*.jar /app/service.jar
+COPY --from=build /target/kmong-project-*.jar /app/service.jar
 
 CMD ["java", "-jar", "/app/service.jar"]
 #############################################################################################

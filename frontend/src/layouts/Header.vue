@@ -22,7 +22,7 @@
     <v-col cols="11">
       <v-row>
         <v-col cols="4"> 
-          <v-app-bar-title class="font-weight-bold">sample-project</v-app-bar-title>
+          <v-app-bar-title class="font-weight-bold">kmong-project</v-app-bar-title>
         </v-col>
       </v-row>
     </v-col>

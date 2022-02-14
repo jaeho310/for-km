@@ -40,6 +40,16 @@ class SimpleListener {
         products.add(Product.builder().name("가습기").price(3000).build());
         products.add(Product.builder().name("이어폰").price(5000).build());
         products.add(Product.builder().name("냉장고").price(10000).build());
+        products.add(Product.builder().name("타이어").price(12000).build());
+        products.add(Product.builder().name("칫솔").price(1500).build());
+        products.add(Product.builder().name("건전지").price(1000).build());
+        products.add(Product.builder().name("귤").price(500).build());
+        products.add(Product.builder().name("계란").price(6000).build());
+        products.add(Product.builder().name("배추").price(3000).build());
+        products.add(Product.builder().name("오이").price(2500).build());
+        products.add(Product.builder().name("감자").price(7000).build());
+        products.add(Product.builder().name("양파").price(12000).build());
+        products.add(Product.builder().name("두부").price(1300).build());
         productRepository.saveAll(products);
 
         String id = "admin";

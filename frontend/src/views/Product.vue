@@ -17,6 +17,10 @@
                 :headers="productListTableHeader"
                 :search="search"
                 dense
+                :footer-props="{
+                  'items-per-page-options': [15, 20, 30, 40, 50, 1000]
+                }"
+                :items-per-page="15"
             >
               <template v-slot:top>
                 <v-text-field
@@ -146,7 +150,12 @@ export default {
       this.selectedProductInfo.id = row.id
     },
     toOrderList() {
-      this.$router.push('order-list')
+      // this.$router.push('order-list')
+      this.selectedProductInfo.id = ''
+      this.selectedProductInfo.name = ''
+      this.selectedProductInfo.price = 0
+      this.selectedProductInfo.count = 0
+      this.selectedProductInfo.totalCount = 0
     },
     order() {
       if (this.selectedProductInfo.name === "" || this.selectedProductInfo.count === 0) {
@@ -191,6 +200,7 @@ export default {
             }
           })
           .catch(err => {
+            console.log(err)
             dialog.makeDialog({text: "상품목록을 받아오지 못했습니다."})
           })
     }

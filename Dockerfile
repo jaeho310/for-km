@@ -13,9 +13,6 @@ COPY frontend ./frontend
 COPY pom.xml ./
 
 RUN mvn -B clean package -DskipTests
-#        -DproxySet=${PROXY_SET} \
-#        -DproxyHost=${PROXY_HOST} \
-#        -DproxyPort=${PROXY_PORT}
 
 #############################################################################################
 
